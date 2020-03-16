@@ -47,7 +47,7 @@ class Graph:
         # Create a set to store visited vertices
         visited = set()
         # while the queue is not empty...
-        while q.size > 0:
+        while q.size() > 0:
             # Dequeue the first vertex
             v = q.dequeue()
             # check if it's been visited
@@ -114,20 +114,33 @@ class Graph:
         breath-first order.
         """
         # Create a queue
+        q = Queue()
         # Enqueue A PATH TO the starting vertex
+        q.enqueue([starting_vertex])
         # Create a set to store visited vertices
+        visited = set()
         # While the queue is not empty...
-        # Dequeue the first PATH
+        while q.size() > 0:
+            # Dequeue the first PATH
+            path = q.dequeue()
         # GRAB THE VERTEX FROM THE END OF THE PATH
+            vertex = path[-1]
         # Check if it's been visited
         # If it hasn't been visited...
-        # Mark it as visited
-        # CHECK IF IT'S THE TARGET
-        # IF SO, RETURN THE PATH
-        # Enqueue A PATH TO all it's neighbors
-        # MAKE A COPY OF THE PATH
-        # ENQUEUE THE COPY
-        pass  # TODO
+            if vertex not in visited:
+                # CHECK IF IT'S THE TARGET
+                # IF SO, RETURN THE PATH
+                if vertex == destination_vertex:
+                    return path
+            # Mark it as visited
+                visited.add(vertex)
+            # Enqueue A PATH TO all it's neighbors
+            for neighbor in self.get_neighbors(vertex):
+                # MAKE A COPY OF THE PATH
+                new_path = list(path)
+                new_path.append(neighbor)
+            # ENQUEUE THE COPY
+                q.enqueue(new_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -136,20 +149,33 @@ class Graph:
         depth-first order.
         """
         # Create a stack
+        s = Stack()
         # Push A PATH TO the starting vertex
+        s.push([starting_vertex])
         # Create a set to store visited vertices
+        visited = set()
         # While the stack is not empty...
-        # Pop the first PATH
+        while s.size() > 0:
+            # Pop the first PATH
+            path = s.pop()
         # GRAB THE VERTEX FROM THE END OF THE PATH
-        # Check if it's been visited
-        # If it hasn't been visited...
-        # Mark it as visited
-        # CHECK IF IT'S THE TARGET
-        # IF SO, RETURN THE PATH
-        # Push A PATH TO all it's neighbors
-        # MAKE A COPY OF THE PATH
-        # Push THE COPY
-        pass  # TODO
+            vertex = path[-1]
+            # Check if it's been visited
+            # If it hasn't been visited...
+            if vertex not in visited:
+                # CHECK IF IT'S THE TARGET
+                # IF SO, RETURN THE PATH
+                if vertex == destination_vertex:
+                    return path
+            # Mark it as visited
+                visited.add(vertex)
+            # Push A PATH TO all it's neighbors
+            for neighbor in self.get_neighbors(vertex):
+                # MAKE A COPY OF THE PATH
+                new_path = list(path)
+                new_path.append(neighbor)
+            # Push THE COPY
+                s.push(new_path)
 
     def dfs_recursive(self, starting_vertex):
         """
