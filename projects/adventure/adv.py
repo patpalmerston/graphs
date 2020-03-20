@@ -54,6 +54,14 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+path = []
+rooms_visited = {}
+reverse_movement = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+
+rooms_visited[player.current_room] = player.current_room.get_exits()
+
+while len(rooms_visited) < len(room_graph):
+    print('room_visited', rooms_visited)
 
 
 # TRAVERSAL TEST
