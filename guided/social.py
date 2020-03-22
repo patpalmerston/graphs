@@ -1,12 +1,9 @@
-import time
 import random
 from util import Stack, Queue  # These may come in handy
-
 
 class User:
     def __init__(self, name):
         self.name = name
-
 
 class SocialGraph:
     def __init__(self):
@@ -75,6 +72,7 @@ class SocialGraph:
             friendship = possible_friendships[i]
             self.add_friendship(friendship[0], friendship[1])
 
+
     def populate_graph_linear(self, num_users, avg_friendships):
         # Reset graph
         self.last_id = 0
@@ -138,6 +136,7 @@ class SocialGraph:
                     q.enqueue(path_copy)
         return visited
 
+import time
 
 if __name__ == '__main__':
     # sg = SocialGraph()
@@ -164,3 +163,8 @@ if __name__ == '__main__':
     sg.populate_graph_linear(num_users, avg_friendships)
     end_time = time.time()
     print(f"Linear populate: {end_time - start_time} seconds")
+
+
+
+
+
