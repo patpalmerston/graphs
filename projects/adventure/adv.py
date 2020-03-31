@@ -5,64 +5,59 @@ from world import World
 import random
 from ast import literal_eval
 
-# Create a queue so we can implement a BFS
-
-
-class Queue():
-    def __init__(self):
-        self.queue = []
-
-    def __repr__(self):
-        return f"que: {self.queue}"
-
-    def __str__(self):
-        return f"que: {self.queue}"
-
-    def enqueue(self, value):
-        self.queue.append(value)
-
-    def dequeue(self):
-        if self.size() > 0:
-            return self.queue.pop(0)
-        else:
-            return None
-
-    def size(self):
-        return len(self.queue)
-
 
 # Load world
 world = World()
 
-
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph = literal_eval(open(map_file, "r").read())
 world.load_graph(room_graph)
 
 # Print an ASCII map
-world.print_rooms()
+# world.print_rooms()
 
 player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+directions = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 path = []
 rooms_visited = {}
-reverse_movement = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 
-rooms_visited[player.current_room] = player.current_room.get_exits()
+# keep track of rooms visited with the players current room id equal to all the exits in that room
+rooms_visited[player.current_room.id] = player.current_room.get_exits()
+# randomize our starting point
+random.shuffle(rooms_visited[player.current_room.id])
 
-while len(rooms_visited) < len(room_graph):
-    print('room_visited', rooms_visited)
+# if rooms visited is less than all the rooms, all of them haven't been visited yet
+while len(rooms_visited) < len(room_graph) - 1:
 
+    # if player room isn't in rooms visited, add it to the visited rooms and remove the last direction
+    if player.current_room.id not in rooms_visited:
+        rooms_visited[player.current_room.id] = player.current_room.get_exits()
+        random.shuffle(rooms_visited[player.current_room.id])
+
+        last_direction = path[-1]
+        rooms_visited[player.current_room.id].remove(last_direction)
+
+    # if we've reached all the rooms, remove last get_exits(), add it to the traversal path, then travel
+    while len(rooms_visited[player.current_room.id]) < 1:
+        last_direction = path.pop()
+        traversal_path.append(last_direction)
+        player.travel(last_direction)
+
+    move_direction = rooms_visited[player.current_room.id].pop(0)
+    traversal_path.append(move_direction)
+    path.append(directions[move_direction])
+    player.travel(move_direction)
 
 # TRAVERSAL TEST
 visited_rooms = set()
